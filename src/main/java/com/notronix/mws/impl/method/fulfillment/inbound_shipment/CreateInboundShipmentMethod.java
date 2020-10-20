@@ -1,8 +1,8 @@
 package com.notronix.mws.impl.method.fulfillment.inbound_shipment;
 
 import com.amazonservices.mws.FulfillmentInboundShipment._2010_10_01.model.*;
-import com.notronix.mws.api.service.AmazonAPIException;
-import com.notronix.mws.api.service.GeneralAmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
+import com.notronix.mws.api.GeneralAmazonAPIException;
 import com.notronix.mws.api.model.IntendedBoxContentsSource;
 import com.notronix.mws.api.model.LabelPrepPreference;
 import com.notronix.mws.api.model.ShipmentStatus;

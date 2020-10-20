@@ -1,4 +1,4 @@
-package com.notronix.mws.api.service;
+package com.notronix.mws.api;
 
 public abstract class AmazonAPIException extends Exception
 {

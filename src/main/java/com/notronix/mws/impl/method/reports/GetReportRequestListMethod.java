@@ -2,7 +2,7 @@ package com.notronix.mws.impl.method.reports;
 
 import com.amazonaws.mws.model.GetReportRequestListRequest;
 import com.amazonaws.mws.model.IdList;
-import com.notronix.mws.api.service.AmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
 
 import java.util.List;
 

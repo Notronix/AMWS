@@ -2,7 +2,7 @@ package com.notronix.mws.impl.method.products;
 
 import com.amazonservices.mws.products.model.ASINListType;
 import com.amazonservices.mws.products.model.GetCompetitivePricingForASINRequest;
-import com.notronix.mws.api.service.AmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;

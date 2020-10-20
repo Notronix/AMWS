@@ -8,6 +8,10 @@ import com.amazonservices.mws.products.model.*;
 import com.amazonservices.mws.sellers.model.ListMarketplaceParticipationsRequest;
 import com.amazonservices.mws.sellers.model.ListMarketplaceParticipationsResponse;
 import com.amazonservices.mws.subscriptions.model.*;
+import com.notronix.mws.api.AmazonAPIException;
+import com.notronix.mws.api.DeniedAccessException;
+import com.notronix.mws.api.GeneralAmazonAPIException;
+import com.notronix.mws.api.ThrottlingException;
 import com.notronix.mws.api.method.AmazonAPIMethod;
 import com.notronix.mws.api.model.AmazonMarketplace;
 
@@ -21,7 +25,7 @@ public interface AmazonService
      * that include seller-specific information in that marketplace.
      *
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the AmazonCredentials does not have access to the
      *                                   AmazonMarketplace.
@@ -43,7 +47,7 @@ public interface AmazonService
      * {@link #getReportListByNextToken} iteratively until <code>HasNext</code> is returned set to <code>false</code>.
      *
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the AmazonCredentials does not have access to the
      *                                   AmazonMarketplace.
@@ -53,8 +57,8 @@ public interface AmazonService
      *                                   all other thrown exceptions.
      * @see #getReportListByNextToken
      */
-    <T extends GetReportListRequest>
-    GetReportListResponse getReportList(AmazonAPIMethod<T> method) throws AmazonAPIException;
+    <R extends GetReportListRequest>
+    GetReportListResponse getReportList(AmazonAPIMethod<R> method) throws AmazonAPIException;
 
     /**
      * Returns a list of reports using the {@link GetReportListByNextTokenResult#getNextToken() NextToken}, which was
@@ -62,7 +66,7 @@ public interface AmazonService
      * was <code>true</code>.
      *
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -72,8 +76,8 @@ public interface AmazonService
      *                                   all other thrown exceptions.
      * @see #getReportList
      */
-    <T extends GetReportListByNextTokenRequest>
-    GetReportListByNextTokenResponse getReportListByNextToken(AmazonAPIMethod<T> method) throws AmazonAPIException;
+    <R extends GetReportListByNextTokenRequest>
+    GetReportListByNextTokenResponse getReportListByNextToken(AmazonAPIMethod<R> method) throws AmazonAPIException;
 
     /**
      * Returns the contents of a report and the <code>Content-MD5 header</code> for the returned report body. Reports
@@ -83,7 +87,7 @@ public interface AmazonService
      * request up to three more times. Please notify Amazon MWS if you receive a corrupted report body.
      *
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -92,7 +96,7 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetReportRequest> GetReportResponse getReport(AmazonAPIMethod<T> method) throws AmazonAPIException;
+    <R extends GetReportRequest> GetReportResponse getReport(AmazonAPIMethod<R> method) throws AmazonAPIException;
 
     /**
      * Returns a list of report requests that match the parameters provided by the supplied <code>method</code>.
@@ -104,7 +108,7 @@ public interface AmazonService
      * <code>HasNext</code> is returned set to <code>false</code>.
      *
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -113,32 +117,17 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetReportRequestListRequest>
-    GetReportRequestListResponse getReportRequestList(AmazonAPIMethod<T> method)
+    <R extends GetReportRequestListRequest>
+    GetReportRequestListResponse getReportRequestList(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
-    <T extends GetReportRequestListByNextTokenRequest>
-    GetReportRequestListByNextTokenResponse getReportRequestListByNextToken(AmazonAPIMethod<T> method)
-            throws AmazonAPIException;
-
-    /**
-     * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
-     * @return Amazon's response to the API call.
-     * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
-     *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
-     * @throws ThrottlingException       If the API call is throttled by Amazon because the throttle limits are exhausted.
-     * @throws GeneralAmazonAPIException If the call fails for any other reason.
-     * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
-     *                                   all other thrown exceptions.
-     */
-    <T extends RequestReportRequest>
-    RequestReportResponse requestReport(AmazonAPIMethod<T> method)
+    <R extends GetReportRequestListByNextTokenRequest>
+    GetReportRequestListByNextTokenResponse getReportRequestListByNextToken(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -147,13 +136,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetInboundGuidanceForASINRequest>
-    GetInboundGuidanceForASINResponse getFBAInboundGuidance(AmazonAPIMethod<T> method)
+    <R extends RequestReportRequest>
+    RequestReportResponse requestReport(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -162,13 +151,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends CreateInboundShipmentRequest>
-    CreateInboundShipmentResponse createInboundShipment(AmazonAPIMethod<T> method)
+    <R extends GetInboundGuidanceForASINRequest>
+    GetInboundGuidanceForASINResponse getFBAInboundGuidance(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -177,18 +166,33 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends CreateInboundShipmentPlanRequest>
-    CreateInboundShipmentPlanResponse createInboundShipmentPlan(AmazonAPIMethod<T> method)
+    <R extends CreateInboundShipmentRequest>
+    CreateInboundShipmentResponse createInboundShipment(AmazonAPIMethod<R> method)
+            throws AmazonAPIException;
+
+    /**
+     * @param method A method that is responsible for building a correct request.
+     * @param <R>    The type of request required to execute this API call.
+     * @return Amazon's response to the API call.
+     * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
+     *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
+     * @throws ThrottlingException       If the API call is throttled by Amazon because the throttle limits are exhausted.
+     * @throws GeneralAmazonAPIException If the call fails for any other reason.
+     * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
+     *                                   all other thrown exceptions.
+     */
+    <R extends CreateInboundShipmentPlanRequest>
+    CreateInboundShipmentPlanResponse createInboundShipmentPlan(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /*      Feeds Methods       */
-    <T extends GetFeedSubmissionResultRequest>
-    GetFeedSubmissionResultResponse getFeedSubmissionResult(AmazonAPIMethod<T> method)
+    <R extends GetFeedSubmissionResultRequest>
+    GetFeedSubmissionResultResponse getFeedSubmissionResult(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -197,13 +201,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetFeedSubmissionListRequest>
-    GetFeedSubmissionListResponse getFeedSubmissionList(AmazonAPIMethod<T> method)
+    <R extends GetFeedSubmissionListRequest>
+    GetFeedSubmissionListResponse getFeedSubmissionList(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -212,13 +216,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends SubmitFeedRequest>
-    SubmitFeedResponse submitFeed(AmazonAPIMethod<T> method)
+    <R extends SubmitFeedRequest>
+    SubmitFeedResponse submitFeed(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -227,13 +231,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetMyPriceForASINRequest>
-    GetMyPriceForASINResponse getMyPriceForASIN(AmazonAPIMethod<T> method)
+    <R extends GetMyPriceForASINRequest>
+    GetMyPriceForASINResponse getMyPriceForASIN(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -242,13 +246,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetMatchingProductForIdRequest>
-    GetMatchingProductForIdResponse getMatchingProductForId(AmazonAPIMethod<T> method)
+    <R extends GetMatchingProductForIdRequest>
+    GetMatchingProductForIdResponse getMatchingProductForId(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -257,13 +261,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetCompetitivePricingForASINRequest>
-    GetCompetitivePricingForASINResponse getCompetitivePricingForASIN(AmazonAPIMethod<T> method)
+    <R extends GetCompetitivePricingForASINRequest>
+    GetCompetitivePricingForASINResponse getCompetitivePricingForASIN(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -272,13 +276,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetLowestOfferListingsForASINRequest>
-    GetLowestOfferListingsForASINResponse getLowestOfferListingsForASIN(AmazonAPIMethod<T> method)
+    <R extends GetLowestOfferListingsForASINRequest>
+    GetLowestOfferListingsForASINResponse getLowestOfferListingsForASIN(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -287,17 +291,17 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetLowestPricedOffersForASINRequest>
-    GetLowestPricedOffersForASINResponse getLowestPricedOffersForASIN(AmazonAPIMethod<T> method)
+    <R extends GetLowestPricedOffersForASINRequest>
+    GetLowestPricedOffersForASINResponse getLowestPricedOffersForASIN(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
-    <T extends GetProductCategoriesForASINRequest>
-    GetProductCategoriesForASINResponse getProductCategoriesForASIN(AmazonAPIMethod<T> method)
+    <R extends GetProductCategoriesForASINRequest>
+    GetProductCategoriesForASINResponse getProductCategoriesForASIN(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -306,13 +310,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends ListMatchingProductsRequest>
-    ListMatchingProductsResponse listMatchingProducts(AmazonAPIMethod<T> method)
+    <R extends ListMatchingProductsRequest>
+    ListMatchingProductsResponse listMatchingProducts(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -321,13 +325,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetMyFeesEstimateRequest>
-    GetMyFeesEstimateResponse getMyFeesEstimate(AmazonAPIMethod<T> method)
+    <R extends GetMyFeesEstimateRequest>
+    GetMyFeesEstimateResponse getMyFeesEstimate(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -336,13 +340,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends RegisterDestinationInput>
-    RegisterDestinationResponse registerDestination(AmazonAPIMethod<T> method)
+    <R extends RegisterDestinationInput>
+    RegisterDestinationResponse registerDestination(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -351,13 +355,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends CreateSubscriptionInput>
-    CreateSubscriptionResponse createSubscription(AmazonAPIMethod<T> method)
+    <R extends CreateSubscriptionInput>
+    CreateSubscriptionResponse createSubscription(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -366,13 +370,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends ListSubscriptionsInput>
-    ListSubscriptionsResponse listSubscriptions(AmazonAPIMethod<T> method)
+    <R extends ListSubscriptionsInput>
+    ListSubscriptionsResponse listSubscriptions(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -381,13 +385,13 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends ListRegisteredDestinationsInput>
-    ListRegisteredDestinationsResponse listRegisteredDestinations(AmazonAPIMethod<T> method)
+    <R extends ListRegisteredDestinationsInput>
+    ListRegisteredDestinationsResponse listRegisteredDestinations(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 
     /**
      * @param method A method that is responsible for building a correct request.
-     * @param <T>    The type of request required to execute this API call.
+     * @param <R>    The type of request required to execute this API call.
      * @return Amazon's response to the API call.
      * @throws DeniedAccessException     If the caller with the {@link #getCredentials() AmazonCredentials} does not
      *                                   have access to the {@link #getMarketplace() AmazonMarketplace}.
@@ -396,7 +400,7 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends ListInventorySupplyRequest>
-    ListInventorySupplyResponse listInventorySupply(AmazonAPIMethod<T> method)
+    <R extends ListInventorySupplyRequest>
+    ListInventorySupplyResponse listInventorySupply(AmazonAPIMethod<R> method)
             throws AmazonAPIException;
 }

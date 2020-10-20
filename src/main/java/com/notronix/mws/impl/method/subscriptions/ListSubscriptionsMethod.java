@@ -1,7 +1,7 @@
 package com.notronix.mws.impl.method.subscriptions;
 
 import com.amazonservices.mws.subscriptions.model.ListSubscriptionsInput;
-import com.notronix.mws.api.service.AmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
 import com.notronix.mws.api.model.AmazonMarketplace;
 
 public class ListSubscriptionsMethod extends SubscriptionsAPIMethod<ListSubscriptionsInput>

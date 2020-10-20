@@ -1,7 +1,7 @@
 package com.notronix.mws.impl.method.sellers;
 
 import com.amazonservices.mws.sellers.model.ListMarketplaceParticipationsRequest;
-import com.notronix.mws.api.service.AmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
 
 public class ListMarketplaceParticipationsMethod extends SellersAPIMethod<ListMarketplaceParticipationsRequest>
 {

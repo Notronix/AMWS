@@ -1,6 +1,6 @@
 package com.notronix.mws.api.method;
 
-import com.notronix.mws.api.service.AmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
 
 public interface AmazonAPIMethod<R>
 {

@@ -4,8 +4,8 @@ import com.amazonservices.mws.FulfillmentInboundShipment._2010_10_01.model.Addre
 import com.amazonservices.mws.FulfillmentInboundShipment._2010_10_01.model.CreateInboundShipmentPlanRequest;
 import com.amazonservices.mws.FulfillmentInboundShipment._2010_10_01.model.InboundShipmentPlanRequestItem;
 import com.amazonservices.mws.FulfillmentInboundShipment._2010_10_01.model.InboundShipmentPlanRequestItemList;
-import com.notronix.mws.api.service.AmazonAPIException;
-import com.notronix.mws.api.service.GeneralAmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
+import com.notronix.mws.api.GeneralAmazonAPIException;
 import com.notronix.mws.api.model.LabelPrepPreference;
 
 import java.util.ArrayList;

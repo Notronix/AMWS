@@ -20,6 +20,10 @@ import com.amazonservices.mws.sellers.model.ListMarketplaceParticipationsRespons
 import com.amazonservices.mws.subscriptions.MWSSubscriptionsServiceAsyncClient;
 import com.amazonservices.mws.subscriptions.MWSSubscriptionsServiceConfig;
 import com.amazonservices.mws.subscriptions.model.*;
+import com.notronix.mws.api.AmazonAPIException;
+import com.notronix.mws.api.DeniedAccessException;
+import com.notronix.mws.api.GeneralAmazonAPIException;
+import com.notronix.mws.api.ThrottlingException;
 import com.notronix.mws.api.method.AmazonAPIMethod;
 import com.notronix.mws.api.model.AmazonMarketplace;
 import com.notronix.mws.api.service.*;

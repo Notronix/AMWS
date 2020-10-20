@@ -2,8 +2,8 @@ package com.notronix.mws.impl.method.feeds;
 
 import com.amazonaws.mws.model.IdList;
 import com.amazonaws.mws.model.SubmitFeedRequest;
-import com.notronix.mws.api.service.AmazonAPIException;
-import com.notronix.mws.api.service.GeneralAmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
+import com.notronix.mws.api.GeneralAmazonAPIException;
 import com.notronix.mws.api.model.FeedType;
 import org.apache.commons.codec.binary.Base64;
 

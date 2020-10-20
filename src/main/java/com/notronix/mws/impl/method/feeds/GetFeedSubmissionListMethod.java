@@ -1,7 +1,7 @@
 package com.notronix.mws.impl.method.feeds;
 
 import com.amazonaws.mws.model.*;
-import com.notronix.mws.api.service.AmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
 import com.notronix.mws.api.model.FeedType;
 
 import java.util.ArrayList;

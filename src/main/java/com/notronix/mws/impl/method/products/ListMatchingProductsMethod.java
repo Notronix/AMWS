@@ -1,7 +1,7 @@
 package com.notronix.mws.impl.method.products;
 
 import com.amazonservices.mws.products.model.ListMatchingProductsRequest;
-import com.notronix.mws.api.service.AmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
 
 public class ListMatchingProductsMethod extends ProductsAPIMethod<ListMatchingProductsRequest>
 {

@@ -2,8 +2,8 @@ package com.notronix.mws.impl.method.fulfillment.inbound_shipment;
 
 import com.amazonservices.mws.FulfillmentInboundShipment._2010_10_01.model.ASINList;
 import com.amazonservices.mws.FulfillmentInboundShipment._2010_10_01.model.GetInboundGuidanceForASINRequest;
-import com.notronix.mws.api.service.AmazonAPIException;
-import com.notronix.mws.api.service.GeneralAmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
+import com.notronix.mws.api.GeneralAmazonAPIException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

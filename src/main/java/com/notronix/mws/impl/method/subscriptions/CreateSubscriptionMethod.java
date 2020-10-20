@@ -3,7 +3,7 @@ package com.notronix.mws.impl.method.subscriptions;
 import com.amazonservices.mws.subscriptions.model.CreateSubscriptionInput;
 import com.amazonservices.mws.subscriptions.model.Destination;
 import com.amazonservices.mws.subscriptions.model.Subscription;
-import com.notronix.mws.api.service.AmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
 import com.notronix.mws.api.model.AmazonMarketplace;
 import com.notronix.mws.api.model.SubscriptionNotificationType;
 

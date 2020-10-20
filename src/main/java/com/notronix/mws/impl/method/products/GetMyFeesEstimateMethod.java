@@ -4,8 +4,8 @@ import com.amazonservices.mws.products.model.FeesEstimateRequest;
 import com.amazonservices.mws.products.model.FeesEstimateRequestList;
 import com.amazonservices.mws.products.model.GetMyFeesEstimateRequest;
 import com.amazonservices.mws.products.model.PriceToEstimateFees;
-import com.notronix.mws.api.service.AmazonAPIException;
-import com.notronix.mws.api.service.GeneralAmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
+import com.notronix.mws.api.GeneralAmazonAPIException;
 import com.notronix.mws.impl.model.FeeEstimateItem;
 import com.notronix.mws.api.model.IdType;
 

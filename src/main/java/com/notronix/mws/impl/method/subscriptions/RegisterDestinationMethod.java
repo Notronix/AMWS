@@ -4,7 +4,7 @@ import com.amazonservices.mws.subscriptions.model.AttributeKeyValue;
 import com.amazonservices.mws.subscriptions.model.AttributeKeyValueList;
 import com.amazonservices.mws.subscriptions.model.Destination;
 import com.amazonservices.mws.subscriptions.model.RegisterDestinationInput;
-import com.notronix.mws.api.service.AmazonAPIException;
+import com.notronix.mws.api.AmazonAPIException;
 import com.notronix.mws.api.model.AmazonMarketplace;
 
 import java.util.Collections;
