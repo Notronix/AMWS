@@ -6,7 +6,7 @@ import com.amazonaws.mws.MarketplaceWebServiceConfig;
 import com.amazonaws.mws.MarketplaceWebServiceException;
 import com.amazonaws.mws.model.GetReportListRequest;
 import com.amazonaws.mws.model.GetReportListResponse;
-import com.notronix.mws.AmazonMarketplace;
+import com.notronix.mws.api.model.AmazonMarketplace;
 
 public class GetReportListSample
 {

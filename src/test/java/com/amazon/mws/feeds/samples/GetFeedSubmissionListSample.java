@@ -5,7 +5,7 @@ import com.amazonaws.mws.MarketplaceWebServiceClient;
 import com.amazonaws.mws.MarketplaceWebServiceConfig;
 import com.amazonaws.mws.MarketplaceWebServiceException;
 import com.amazonaws.mws.model.*;
-import com.notronix.mws.AmazonMarketplace;
+import com.notronix.mws.api.model.AmazonMarketplace;
 
 public class GetFeedSubmissionListSample
 {

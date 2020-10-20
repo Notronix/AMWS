@@ -1,6 +1,5 @@
 package com.amazon.mws.products.samples;
 
-import com.amazonservices.mws.products.MarketplaceWebServiceProducts;
 import com.amazonservices.mws.products.MarketplaceWebServiceProductsAsyncClient;
 import com.amazonservices.mws.products.MarketplaceWebServiceProductsConfig;
 import com.amazonservices.mws.products.MarketplaceWebServiceProductsException;
@@ -8,7 +7,7 @@ import com.amazonservices.mws.products.model.GetMatchingProductForIdRequest;
 import com.amazonservices.mws.products.model.GetMatchingProductForIdResponse;
 import com.amazonservices.mws.products.model.IdListType;
 import com.amazonservices.mws.products.model.ResponseHeaderMetadata;
-import com.notronix.mws.AmazonMarketplace;
+import com.notronix.mws.api.model.AmazonMarketplace;
 
 public class GetMatchingProductForIdSample
 {

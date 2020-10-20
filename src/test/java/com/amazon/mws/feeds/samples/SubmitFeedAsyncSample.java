@@ -6,7 +6,7 @@ import com.amazonaws.mws.MarketplaceWebServiceConfig;
 import com.amazonaws.mws.MarketplaceWebServiceException;
 import com.amazonaws.mws.model.SubmitFeedRequest;
 import com.amazonaws.mws.model.SubmitFeedResponse;
-import com.notronix.mws.model.FeedType;
+import com.notronix.mws.api.model.FeedType;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
