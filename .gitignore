@@ -4,6 +4,7 @@
 # User-specific stuff:
 .idea
 amws.properties
+.gradle
 
 # CMake
 cmake-build-debug/

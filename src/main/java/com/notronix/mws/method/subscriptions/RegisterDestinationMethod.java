@@ -5,13 +5,21 @@ import com.amazonservices.mws.subscriptions.model.AttributeKeyValueList;
 import com.amazonservices.mws.subscriptions.model.Destination;
 import com.amazonservices.mws.subscriptions.model.RegisterDestinationInput;
 import com.notronix.mws.AmazonAPIException;
+import com.notronix.mws.AmazonMarketplace;
 
 import java.util.Collections;
 
 public class RegisterDestinationMethod extends SubscriptionsAPIMethod<RegisterDestinationInput>
 {
+    private String sellerId;
+    private AmazonMarketplace marketplace;
     private String queueURL;
     private Destination destination;
+
+    public RegisterDestinationMethod(String sellerId, AmazonMarketplace marketplace) {
+        this.sellerId = sellerId;
+        this.marketplace = marketplace;
+    }
 
     @Override
     public RegisterDestinationInput buildRequest() throws AmazonAPIException
@@ -20,7 +28,26 @@ public class RegisterDestinationMethod extends SubscriptionsAPIMethod<RegisterDe
         AttributeKeyValueList properties = new AttributeKeyValueList(Collections.singletonList(property));
         destination = new Destination("SQS", properties);
 
-        return new RegisterDestinationInput().withDestination(destination);
+        return new RegisterDestinationInput()
+                .withSellerId(sellerId)
+                .withMarketplaceId(marketplace.marketplaceID())
+                .withDestination(destination);
+    }
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public AmazonMarketplace getMarketplace() {
+        return marketplace;
+    }
+
+    public void setMarketplace(AmazonMarketplace marketplace) {
+        this.marketplace = marketplace;
     }
 
     public String getQueueURL()

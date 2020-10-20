@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public class Price
 {
     private String currency;
-    private double amount = 0.0;
+    private double amount;
 
     public Price(String currency, double amount) {
         this.currency = currency;

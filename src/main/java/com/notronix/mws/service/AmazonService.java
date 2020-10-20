@@ -5,6 +5,8 @@ import com.amazonservices.mws.FulfillmentInboundShipment._2010_10_01.model.*;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInventorySupplyRequest;
 import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInventorySupplyResponse;
 import com.amazonservices.mws.products.model.*;
+import com.amazonservices.mws.sellers.model.ListMarketplaceParticipationsRequest;
+import com.amazonservices.mws.sellers.model.ListMarketplaceParticipationsResponse;
 import com.amazonservices.mws.subscriptions.model.*;
 import com.notronix.mws.*;
 import com.notronix.mws.method.AmazonAPIMethod;
@@ -12,15 +14,32 @@ import com.notronix.mws.method.AmazonAPIMethod;
 public interface AmazonService
 {
     AmazonMarketplace getMarketplace();
-
     AmazonCredentials getCredentials();
+
+    /**
+     * Returns a list of marketplaces that the seller submitting the request can sell in, and a list of participations
+     * that include seller-specific information in that marketplace.
+     *
+     * @param method A method that is responsible for building a correct request.
+     * @param <T>    The type of request required to execute this API call.
+     * @return Amazon's response to the API call.
+     * @throws DeniedAccessException     If the caller with the AmazonCredentials does not have access to the
+     *                                   AmazonMarketplace.
+     * @throws ThrottlingException       If the API call is throttled by Amazon because the throttle limits are exhausted.
+     * @throws GeneralAmazonAPIException If the call fails for any other reason.
+     * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
+     *                                   all other thrown exceptions.
+     */
+    <T extends ListMarketplaceParticipationsRequest>
+    ListMarketplaceParticipationsResponse listMarketplaceParticipations(AmazonAPIMethod<T> method)
+            throws AmazonAPIException;
 
     /**
      * Returns a list of reports that were created in the previous 90 days.
      * <p>
      * A maximum of 100 results can be returned in one request. If there are additional results to return,
-     * {@link GetReportListResult#hasNext HasNext} is returned set to <code>true</code> in the response. To retrieve
-     * all the results, you can pass the value of the {@link GetReportListResult#nextToken NextToken} parameter to
+     * {@link GetReportListResult#isHasNext() HasNext} is returned set to <code>true</code> in the response. To retrieve
+     * all the results, you can pass the value of the {@link GetReportListResult#getNextToken() NextToken} parameter to
      * {@link #getReportListByNextToken} iteratively until <code>HasNext</code> is returned set to <code>false</code>.
      *
      * @param method A method that is responsible for building a correct request.
@@ -35,13 +54,12 @@ public interface AmazonService
      * @see #getReportListByNextToken
      */
     <T extends GetReportListRequest>
-    GetReportListResponse getReportList(AmazonAPIMethod<T> method)
-            throws AmazonAPIException;
+    GetReportListResponse getReportList(AmazonAPIMethod<T> method) throws AmazonAPIException;
 
     /**
-     * Returns a list of reports using the {@link GetReportListByNextTokenResult#nextToken NextToken}, which was
-     * supplied by a previous call to either {@link #getReportListByNextToken} or
-     * {@link #getReportList}, where the value of <code>HasNext</code> was <code>true</code>.
+     * Returns a list of reports using the {@link GetReportListByNextTokenResult#getNextToken() NextToken}, which was
+     * supplied by a previous call to either this method or {@link #getReportList}, where the value of <code>HasNext</code>
+     * was <code>true</code>.
      *
      * @param method A method that is responsible for building a correct request.
      * @param <T>    The type of request required to execute this API call.
@@ -55,8 +73,7 @@ public interface AmazonService
      * @see #getReportList
      */
     <T extends GetReportListByNextTokenRequest>
-    GetReportListByNextTokenResponse getReportListByNextToken(AmazonAPIMethod<T> method)
-            throws AmazonAPIException;
+    GetReportListByNextTokenResponse getReportListByNextToken(AmazonAPIMethod<T> method) throws AmazonAPIException;
 
     /**
      * Returns the contents of a report and the <code>Content-MD5 header</code> for the returned report body. Reports
@@ -75,9 +92,7 @@ public interface AmazonService
      * @throws AmazonAPIException        this exception is abstract and never directly thrown. It is the base type for
      *                                   all other thrown exceptions.
      */
-    <T extends GetReportRequest>
-    GetReportResponse getReport(AmazonAPIMethod<T> method)
-            throws AmazonAPIException;
+    <T extends GetReportRequest> GetReportResponse getReport(AmazonAPIMethod<T> method) throws AmazonAPIException;
 
     /**
      * Returns a list of report requests that match the parameters provided by the supplied <code>method</code>.
@@ -274,6 +289,10 @@ public interface AmazonService
      */
     <T extends GetLowestPricedOffersForASINRequest>
     GetLowestPricedOffersForASINResponse getLowestPricedOffersForASIN(AmazonAPIMethod<T> method)
+            throws AmazonAPIException;
+
+    <T extends GetProductCategoriesForASINRequest>
+    GetProductCategoriesForASINResponse getProductCategoriesForASIN(AmazonAPIMethod<T> method)
             throws AmazonAPIException;
 
     /**

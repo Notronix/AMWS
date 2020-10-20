@@ -4,14 +4,14 @@ apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 group 'com.notronix'
-version '0.0.001'
+version '1.0.0001'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'com.notronix:AlbacoreDeed:2.0.0'
+    compile 'com.notronix:AlbacoreDeed:2.0.5'
     compile 'org.apache.httpcomponents:httpclient:4.4'
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'org.apache.logging.log4j:log4j-api:2.9.0'
@@ -67,8 +67,8 @@ uploadArchives {
             pom.project {
                 name rootProject.name
                 packaging 'jar'
-                description 'A bridge to Hibernate 5 that simplifies the bootstrap procedure for Hibernate projects using stateless sessions.'
-                url 'https://github.com/Notronix/HIbermate/'
+                description 'A consolidated Java library to simplify using the Amazon MWS API.'
+                url 'https://github.com/Notronix/AMWS'
 
                 scm {
                     url 'scm:git@github.com:Notronix/' + rootProject.name + '.git'

@@ -3,6 +3,7 @@ package com.notronix.mws.method.products;
 import com.amazonservices.mws.products.model.ASINListType;
 import com.amazonservices.mws.products.model.GetLowestOfferListingsForASINRequest;
 import com.notronix.mws.AmazonAPIException;
+import com.notronix.mws.model.ItemCondition;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import static com.notronix.albacore.ContainerUtils.numberOf;
 public class GetLowestOfferListingsForASINMethod extends ProductsAPIMethod<GetLowestOfferListingsForASINRequest>
 {
     private Set<String> asins;
+    private ItemCondition itemCondition = ItemCondition.Any;
 
     public GetLowestOfferListingsForASINMethod(Set<String> asins) throws IllegalArgumentException {
         Set<String> validASINs = asins.stream().filter(StringUtils::isNotBlank).collect(Collectors.toSet());
@@ -29,7 +31,9 @@ public class GetLowestOfferListingsForASINMethod extends ProductsAPIMethod<GetLo
         ASINListType asinList = new ASINListType();
         asinList.setASIN(new ArrayList<>(asins));
 
-        return new GetLowestOfferListingsForASINRequest().withASINList(asinList);
+        return new GetLowestOfferListingsForASINRequest()
+                .withASINList(asinList)
+                .withItemCondition(itemCondition.name());
     }
 
     public Set<String> getAsins() {
@@ -38,5 +42,18 @@ public class GetLowestOfferListingsForASINMethod extends ProductsAPIMethod<GetLo
 
     public void setAsins(Set<String> asins) {
         this.asins = asins;
+    }
+
+    public ItemCondition getItemCondition() {
+        return itemCondition;
+    }
+
+    public void setItemCondition(ItemCondition itemCondition) {
+        this.itemCondition = itemCondition;
+    }
+
+    public GetLowestOfferListingsForASINMethod withItemCondition(ItemCondition itemCondition) {
+        this.itemCondition = itemCondition;
+        return this;
     }
 }

@@ -2,7 +2,7 @@ package com.notronix.mws.method;
 
 import com.notronix.mws.AmazonAPIException;
 
-public interface AmazonAPIMethod<Request>
+public interface AmazonAPIMethod<R>
 {
-    Request buildRequest() throws AmazonAPIException;
+    R buildRequest() throws AmazonAPIException;
 }

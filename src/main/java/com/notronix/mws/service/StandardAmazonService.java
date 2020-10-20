@@ -13,6 +13,10 @@ import com.amazonservices.mws.FulfillmentInventory._2010_10_01.model.ListInvento
 import com.amazonservices.mws.products.MarketplaceWebServiceProductsAsyncClient;
 import com.amazonservices.mws.products.MarketplaceWebServiceProductsConfig;
 import com.amazonservices.mws.products.model.*;
+import com.amazonservices.mws.sellers.MarketplaceWebServiceSellersAsyncClient;
+import com.amazonservices.mws.sellers.MarketplaceWebServiceSellersConfig;
+import com.amazonservices.mws.sellers.model.ListMarketplaceParticipationsRequest;
+import com.amazonservices.mws.sellers.model.ListMarketplaceParticipationsResponse;
 import com.amazonservices.mws.subscriptions.MWSSubscriptionsServiceAsyncClient;
 import com.amazonservices.mws.subscriptions.MWSSubscriptionsServiceConfig;
 import com.amazonservices.mws.subscriptions.model.*;
@@ -22,10 +26,16 @@ import com.notronix.mws.method.AmazonAPIMethod;
 import javax.xml.bind.annotation.XmlElement;
 import java.lang.reflect.Field;
 
+import static java.util.Objects.requireNonNull;
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
+
 public class StandardAmazonService implements AmazonService
 {
-    private AmazonMarketplace marketplace;
-    private AmazonCredentials credentials;
+    private static final String appName = "AMWS";
+    private static final String appVersion = "1.0.0001";
+    
+    private final AmazonMarketplace marketplace;
+    private final AmazonCredentials credentials;
 
     private MarketplaceWebServiceClient feedsClient;
     private final Object feedsLock = new Object();
@@ -42,11 +52,14 @@ public class StandardAmazonService implements AmazonService
     private FBAInventoryServiceMWSAsyncClient fbaInventoryClient;
     private final Object fbaInventoryLock = new Object();
 
-    StandardAmazonService(AmazonMarketplace marketplace, AmazonCredentials credentials) {
-        this.marketplace = marketplace;
-        this.credentials = credentials;
-    }
+    private MarketplaceWebServiceSellersAsyncClient sellersClient;
+    private final Object sellersLock = new Object();
 
+    public StandardAmazonService(AmazonMarketplace marketplace, AmazonCredentials credentials) {
+        this.marketplace = requireNonNull(marketplace);
+        this.credentials = requireNonNull(credentials);
+    }
+    
     @Override
     public AmazonMarketplace getMarketplace() {
         return marketplace;
@@ -58,21 +71,30 @@ public class StandardAmazonService implements AmazonService
     }
 
     @Override
+    public <T extends ListMarketplaceParticipationsRequest>
+    ListMarketplaceParticipationsResponse listMarketplaceParticipations(AmazonAPIMethod<T> method)
+            throws AmazonAPIException {
+        try {
+            return getSellersClient().listMarketplaceParticipations(bootstrapRequest(method.buildRequest()));
+        } catch (Exception ex) {
+            throw handleException("Error getting marketplace participations.", ex);
+        }
+    }
+
+    @Override
     public <T extends GetReportListRequest>
     GetReportListResponse getReportList(AmazonAPIMethod<T> method)
             throws AmazonAPIException {
         try {
             return getFeedsAndReportsClient().getReportList(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting report list.", ex);
         }
     }
 
     @Override
     public <T extends GetReportListByNextTokenRequest>
-    GetReportListByNextTokenResponse getReportListByNextToken(AmazonAPIMethod<T> method)
-            throws AmazonAPIException {
+    GetReportListByNextTokenResponse getReportListByNextToken(AmazonAPIMethod<T> method) {
         return null;
     }
 
@@ -82,28 +104,24 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getFeedsAndReportsClient().getReport(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting report.", ex);
         }
     }
 
     @Override
     public <T extends GetReportRequestListRequest>
-    GetReportRequestListResponse getReportRequestList(AmazonAPIMethod<T> method)
-            throws AmazonAPIException {
+    GetReportRequestListResponse getReportRequestList(AmazonAPIMethod<T> method) throws AmazonAPIException {
         try {
             return getFeedsAndReportsClient().getReportRequestList(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting report request list.", ex);
         }
     }
 
     @Override
     public <T extends GetReportRequestListByNextTokenRequest>
-    GetReportRequestListByNextTokenResponse getReportRequestListByNextToken(AmazonAPIMethod<T> method)
-            throws AmazonAPIException {
+    GetReportRequestListByNextTokenResponse getReportRequestListByNextToken(AmazonAPIMethod<T> method) {
         return null;
     }
 
@@ -113,8 +131,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getFeedsAndReportsClient().requestReport(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error requesting report.", ex);
         }
     }
@@ -125,8 +142,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getFBAInboundClient().getInboundGuidanceForASIN(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting FBA inbound guidance for ASIN.", ex);
         }
     }
@@ -137,8 +153,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getFBAInboundClient().createInboundShipment(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error creating FBA inbound shipment.", ex);
         }
     }
@@ -149,8 +164,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getFBAInboundClient().createInboundShipmentPlan(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error creating FBA inbound shipment plan.", ex);
         }
     }
@@ -161,8 +175,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getFeedsAndReportsClient().getFeedSubmissionResult(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting feed submission result.", ex);
         }
     }
@@ -173,8 +186,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getFeedsAndReportsClient().getFeedSubmissionList(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting feed submission list.", ex);
         }
     }
@@ -185,8 +197,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getFeedsAndReportsClient().submitFeed(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error submitting feed.", ex);
         }
     }
@@ -197,8 +208,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getProductsClient().getMyPriceForASIN(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting my price for ASIN.", ex);
         }
     }
@@ -209,8 +219,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getProductsClient().getMatchingProductForId(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting matching products for Id.", ex);
         }
     }
@@ -221,8 +230,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getProductsClient().getCompetitivePricingForASIN(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting competitive pricing for ASIN.", ex);
         }
     }
@@ -233,8 +241,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getProductsClient().getLowestOfferListingsForASIN(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting lowest offer listings for ASIN.", ex);
         }
     }
@@ -245,9 +252,19 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getProductsClient().getLowestPricedOffersForASIN(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting lowest priced offers for ASIN.", ex);
+        }
+    }
+
+    @Override
+    public <T extends GetProductCategoriesForASINRequest>
+    GetProductCategoriesForASINResponse getProductCategoriesForASIN(AmazonAPIMethod<T> method)
+            throws AmazonAPIException {
+        try {
+            return getProductsClient().getProductCategoriesForASIN(bootstrapRequest(method.buildRequest()));
+        } catch (Exception ex) {
+            throw handleException("Error getting product categories for ASIN.", ex);
         }
     }
 
@@ -257,8 +274,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getProductsClient().listMatchingProducts(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting list of matching products.", ex);
         }
     }
@@ -269,8 +285,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getProductsClient().getMyFeesEstimate(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error getting my fee estimates.", ex);
         }
     }
@@ -281,8 +296,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getSubscriptionsClient().registerDestination(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error registering destination.", ex);
         }
     }
@@ -293,8 +307,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getSubscriptionsClient().createSubscription(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error creating subscription.", ex);
         }
     }
@@ -305,8 +318,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getSubscriptionsClient().listSubscriptions(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error listing subscriptions.", ex);
         }
     }
@@ -317,8 +329,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getSubscriptionsClient().listRegisteredDestinations(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error listing registered destinations.", ex);
         }
     }
@@ -329,8 +340,7 @@ public class StandardAmazonService implements AmazonService
             throws AmazonAPIException {
         try {
             return getFBAInventoryClient().listInventorySupply(bootstrapRequest(method.buildRequest()));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw handleException("Error listing inventory supply.", ex);
         }
     }
@@ -345,14 +355,28 @@ public class StandardAmazonService implements AmazonService
                 FBAInventoryServiceMWSConfig config = new FBAInventoryServiceMWSConfig()
                         .withServiceURL(marketplace.serviceUrl());
                 fbaInventoryClient = new FBAInventoryServiceMWSAsyncClient(credentials.getAccessKey(),
-                        credentials.getSecretKey(),
-                        credentials.getApplicationName(),
-                        credentials.getApplicationVersion(),
-                        config);
+                        credentials.getSecretKey(), appName, appVersion, config);
             }
         }
 
         return fbaInventoryClient;
+    }
+
+    private MarketplaceWebServiceSellersAsyncClient getSellersClient() {
+        if (sellersClient != null) {
+            return sellersClient;
+        }
+
+        synchronized (sellersLock) {
+            if (sellersClient == null) {
+                MarketplaceWebServiceSellersConfig config = new MarketplaceWebServiceSellersConfig()
+                        .withServiceURL(marketplace.serviceUrl());
+                sellersClient = new MarketplaceWebServiceSellersAsyncClient(credentials.getAccessKey(),
+                        credentials.getSecretKey(), appName, appVersion, config);
+            }
+        }
+
+        return sellersClient;
     }
 
     private MWSSubscriptionsServiceAsyncClient getSubscriptionsClient() {
@@ -365,10 +389,7 @@ public class StandardAmazonService implements AmazonService
                 MWSSubscriptionsServiceConfig config = new MWSSubscriptionsServiceConfig()
                         .withServiceURL(marketplace.serviceUrl());
                 subscriptionsClient = new MWSSubscriptionsServiceAsyncClient(credentials.getAccessKey(),
-                        credentials.getSecretKey(),
-                        credentials.getApplicationName(),
-                        credentials.getApplicationVersion(),
-                        config);
+                        credentials.getSecretKey(), appName, appVersion, config);
             }
         }
 
@@ -385,10 +406,7 @@ public class StandardAmazonService implements AmazonService
                 MarketplaceWebServiceProductsConfig config = new MarketplaceWebServiceProductsConfig()
                         .withServiceURL(marketplace.serviceUrl());
                 productsClient = new MarketplaceWebServiceProductsAsyncClient(credentials.getAccessKey(),
-                        credentials.getSecretKey(),
-                        credentials.getApplicationName(),
-                        credentials.getApplicationVersion(),
-                        config);
+                        credentials.getSecretKey(), appName, appVersion, config);
             }
         }
 
@@ -405,10 +423,7 @@ public class StandardAmazonService implements AmazonService
                 FBAInboundServiceMWSConfig config = new FBAInboundServiceMWSConfig()
                         .withServiceURL(marketplace.serviceUrl());
                 fbaInboundClient = new FBAInboundServiceMWSAsyncClient(credentials.getAccessKey(),
-                        credentials.getSecretKey(),
-                        credentials.getApplicationName(),
-                        credentials.getApplicationVersion(),
-                        config);
+                        credentials.getSecretKey(), appName, appVersion, config);
             }
         }
 
@@ -425,10 +440,7 @@ public class StandardAmazonService implements AmazonService
                 MarketplaceWebServiceConfig config = new MarketplaceWebServiceConfig()
                         .withServiceURL(marketplace.serviceUrl());
                 feedsClient = new MarketplaceWebServiceClient(credentials.getAccessKey(),
-                        credentials.getSecretKey(),
-                        credentials.getApplicationName(),
-                        credentials.getApplicationVersion(),
-                        config);
+                        credentials.getSecretKey(), appName, appVersion, config);
             }
         }
 
@@ -458,26 +470,22 @@ public class StandardAmazonService implements AmazonService
                 }
                 field.set(object, value);
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             // field not required or doesn't exist
         }
     }
 
     private AmazonAPIException handleException(String message, Exception exception) {
-        String msg = exception.getMessage();
-        if (msg != null) {
-            msg = msg.toLowerCase();
+        return containsThrottling(exception.getMessage()) ? new ThrottlingException(message, exception)
+                : (containsAccessDenied(exception.getMessage()) ? new DeniedAccessException(message, exception)
+                : new GeneralAmazonAPIException(message, exception));
+    }
+    
+    private boolean containsAccessDenied(String msg) {
+        return containsIgnoreCase(msg, "Access denied") || containsIgnoreCase(msg, "does not have access");
+    }
 
-            if (msg.contains("does not have access to the given marketplace")) {
-                return new DeniedAccessException(message, exception);
-            }
-
-            if (msg.contains("request is throttled") || msg.contains("throttling rate exceeded")) {
-                return new ThrottlingException(message, exception);
-            }
-        }
-
-        return new GeneralAmazonAPIException(message, exception);
+    private boolean containsThrottling(String msg) {
+        return containsIgnoreCase(msg, "throttled") || containsIgnoreCase(msg, "throttling");
     }
 }
