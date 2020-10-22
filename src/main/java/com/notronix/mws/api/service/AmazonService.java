@@ -15,6 +15,8 @@ import com.notronix.mws.api.ThrottlingException;
 import com.notronix.mws.api.method.AmazonAPIMethod;
 import com.notronix.mws.api.model.AmazonMarketplace;
 
+import java.util.List;
+
 public interface AmazonService
 {
     AmazonMarketplace getMarketplace();

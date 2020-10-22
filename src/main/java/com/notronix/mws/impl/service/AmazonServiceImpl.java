@@ -36,9 +36,8 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 
 public class AmazonServiceImpl implements AmazonService
 {
-    private static final String appName = "AMWS";
-    private static final String appVersion = "1.0.0001";
-    
+    private final String appName;
+    private final String appVersion;
     private final AmazonMarketplace marketplace;
     private final AmazonCredentials credentials;
 
@@ -60,7 +59,9 @@ public class AmazonServiceImpl implements AmazonService
     private MarketplaceWebServiceSellersAsyncClient sellersClient;
     private final Object sellersLock = new Object();
 
-    public AmazonServiceImpl(AmazonMarketplace marketplace, AmazonCredentials credentials) {
+    public AmazonServiceImpl(String appName, String appVersion, AmazonMarketplace marketplace, AmazonCredentials credentials) {
+        this.appName = requireNonNull(appName);
+        this.appVersion = requireNonNull(appVersion);
         this.marketplace = requireNonNull(marketplace);
         this.credentials = requireNonNull(credentials);
     }
